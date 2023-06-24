@@ -31,8 +31,7 @@
  * file.
  */
 typedef struct lru_stack_t {
-	int size;   // Corresponds to the associativity
-    // TODO: Add anything else needed to maintain a LRU Stack (ex: priority bits?).
+	int size;       // Corresponds to the associativity
     int* stack_arr; // Backing array for the stack. LRU will sit at index (size - 1). MRU will sit at index 0.
 } lru_stack_t;
 
@@ -63,6 +62,16 @@ int lru_stack_get_lru(lru_stack_t* stack);
  */
 void lru_stack_set_mru(lru_stack_t* stack, int n);
 
+/**
+ * Helper function to find the index of a specific value within an int array. This function
+ * searches through the array until a match to the given value is found. The index
+ * of that value is returned.
+ * 
+ * @param arr the integeger array being searched through to find the index of a given value
+ * @param size is the size of the given int array
+ * @param value is the specific value this function finds the index of in the given array
+ * @return the index of the given value in the given array, or -1 if the value does not exist
+*/
 int find_array_index(int arr[], int size, int value);
 
 /**

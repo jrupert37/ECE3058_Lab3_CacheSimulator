@@ -31,13 +31,13 @@
  * @return the dynamically allocated stack. 
  */
 lru_stack_t* init_lru_stack(int size) {
-    //  Use malloc to dynamically allocate a lru_stack_t
+    // Use malloc to dynamically allocate an lru_stack_t
 	lru_stack_t* stack = (lru_stack_t*)malloc(sizeof(lru_stack_t));
-    //  Set the stack size the caller passed in
+    // Set the stack size the caller passed in
 	stack->size = size;
-    // Malloc space for the backing array (based on size)
+    // Allocate space for the backing array (based on size)
     stack->stack_arr = (int*)malloc(size * sizeof(int));
-    // Arbitrarily initialize lru stack values
+    // Initialize lru stack values (doesn't matter how)
     int i;
     for(i = 0; i < size; i++) {
         stack->stack_arr[i] = i;
@@ -53,7 +53,7 @@ lru_stack_t* init_lru_stack(int size) {
  * @return the index of the LRU cache block.
  */
 int lru_stack_get_lru(lru_stack_t* stack) {
-    return stack->stack_arr[stack->size - 1];
+    return stack->stack_arr[stack->size - 1]; // The LRU sits at index (size - 1) of the backing array
 } // lru_stack_get_lru
 
 /**
@@ -64,23 +64,36 @@ int lru_stack_get_lru(lru_stack_t* stack) {
  * @param n the index to promote to MRU.  
  */
 void lru_stack_set_mru(lru_stack_t* stack, int n) {
-    int index_of_n = find_array_index(stack->stack_arr, stack->size, n);
-
+    // Use helper function to find index of n
+    int index_of_n = find_array_index(stack->stack_arr, stack->size, n); 
+    // Shift everything before that index down by one spot in the array...
     int i;
     for(i = index_of_n; i >= 1; i--) {
         stack->stack_arr[i] = stack->stack_arr[i - 1];
     }
+    // ...then set "n" as the new MRU (the element at index 0)
     stack->stack_arr[0] = n;
 } // lru_stack_set_mru
 
+/**
+ * Helper function to find the index of a specific value within an int array. This function
+ * searches through the array until a match to the given value is found. The index
+ * of that value is returned.
+ * 
+ * @param arr the integeger array being searched through to find the index of a given value
+ * @param size is the size of the given int array
+ * @param value is the specific value this function finds the index of in the given array
+ * @return the index of the given value in the given array, or -1 if the value does not exist
+ *          
+*/
 int find_array_index(int arr[], int arr_size, int value) {
     int i;
     for (i = 0; i < arr_size; i++) {
         if (arr[i] == value) {
-            return i;
+            return i;                   // If the given value is found, return the index of that value
         }
     }
-    return -1;
+    return -1;                          // Otherwise, return -1
 } // find_array_index
 
 /**
