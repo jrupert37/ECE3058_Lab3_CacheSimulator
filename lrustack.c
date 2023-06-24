@@ -102,14 +102,6 @@ int find_array_index(int arr[], int arr_size, int value) {
  * @param stack the stack to free
  */
 void lru_stack_cleanup(lru_stack_t* stack) {
-    ////////////////////////////////////////////////////////////////////
-    //  TODO: Write any code if you need to do additional heap allocation
-    //  cleanup
-    ////////////////////////////////////////////////////////////////////
-
-    ////////////////////////////////////////////////////////////////////
-    //  End of your code   
-    ////////////////////////////////////////////////////////////////////
-
-    free(stack);        // Free the stack struct we malloc'd
+    free(stack->stack_arr); // Free the backing array of the stack
+    free(stack);            // Free the stack struct itself
 } // lru_stack_cleanup

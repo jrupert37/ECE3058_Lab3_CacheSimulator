@@ -194,13 +194,12 @@ int parse_index(addr_t physical_addr) {
  * Function to free up any dynamically allocated memory you allocated
  */
 void cachesim_cleanup() {
-    ////////////////////////////////////////////////////////////////////
-    //  TODO: Write the code to do any heap allocation cleanup
-    ////////////////////////////////////////////////////////////////////
-
-    ////////////////////////////////////////////////////////////////////
-    //  End of your code   
-    ////////////////////////////////////////////////////////////////////
+    int i;
+    for (i = 0; i < num_sets; i++) {        // Loop through each set in the cache
+        lru_stack_cleanup(cache[i].stack);  //  For each set, free the lru stack
+        free(cache[i].blocks);              //  And free the blocks in that set
+    }
+    free(cache);                            // Finally, free the cache itself
 }
 
 /**
