@@ -174,20 +174,19 @@ int parse_tag(addr_t physical_addr) {
 /**
  * Helper function to parse the index bits from a given memory address. This function creates a 
  * bit mask to elimated the tag bits from the address. Bit mask is calculated by shifting the 
- * value 1 to the left by the num_offset_bits + num_index_bits, then subtracting 1. This will
- * yield a binary string with as many 1s as there are index bits + offset bits, since these are 
- * the bits we want to keep for now. physical_addr is then ANDed with the bit mask to elimate the tag bits, 
- * yielding a value that will then get shifted to the right by the number of offset bits, leaving 
- * behind only the index bits. 
+ * value 1 to the left by num_index_bits, then subtracting 1. This will
+ * yield a binary string with as many 1s as there are index bits.
+ * physical_addr is then shifted to the right by num_offset_bits to eliminate the offset,
+ * then ANDed with the bit mask to elimate the tag bits, leaving behind only
+ * the index bits.
  * 
  * @param physical_addr is the address used for a memory acces, from which we want to parse out the index bits
  * @return the index bits extracted from the given physical_addr
 */
 int parse_index(addr_t physical_addr) {
-    int tag_mask = (1 << (num_offset_bits + num_index_bits)) - 1; // Create bit mask string
-    int index = physical_addr & tag_mask;                         // Mask out the tag bits from the address
-    index = index >> num_offset_bits;                             // Shift address so that only index bits remain
-    return index;
+    int mask = (1 << num_index_bits) - 1;                            // Create bit mask string
+    int index = (physical_addr >> num_offset_bits) & mask;           // Shift address to eliminate offset, then mask out tag bits
+    return index;                                   
 } // parse_index
 
 /**
